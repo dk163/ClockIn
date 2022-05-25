@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.fish</groupId>
-    <artifactId>AppiumDemo</artifactId>
+    <artifactId>ClockIn</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>AppiumDemo</name>
     <description>AppiumDemo</description>

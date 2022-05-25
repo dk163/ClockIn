@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -85,6 +87,9 @@ public class ClockInController {
     @Scheduled(cron = "0 25 9 ? * MON-FRI")
     public void scheduledClockIn() {
         try {
+            List<Integer> list = Arrays.asList(60000, 120000, 180000, 240000);
+            int index = (int) (Math.random() * list.size());
+            Thread.sleep(list.get(index));
             logger.info("====> " + "Scheduled start");
             logger.info("====> " + "Launch the application");
             driver = appiumService.getAndroidDriver();

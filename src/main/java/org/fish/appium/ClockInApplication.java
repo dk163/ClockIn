@@ -17,10 +17,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ComponentScan("org.fish")
 @EnableScheduling
 @EnableAsync
-public class AppiumDemoApplication {
+public class ClockInApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AppiumDemoApplication.class, args);
+        SpringApplication.run(ClockInApplication.class, args);
     }
 
 }
