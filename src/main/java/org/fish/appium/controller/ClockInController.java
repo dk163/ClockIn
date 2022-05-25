@@ -42,7 +42,7 @@ public class ClockInController {
             logger.info("====> " + "Launch the application");
             driver = appiumService.getAndroidDriver();
             for (Map<String, String> stringStringMap : accountTools.getAccount()) {
-                if (stringStringMap.get("username") != null && !stringStringMap.get("username").equals("") && stringStringMap.get("password") != null && !stringStringMap.get("password").equals("")) {
+                if (stringStringMap.get("username") != null && !"".equals(stringStringMap.get("username")) && stringStringMap.get("password") != null && !"".equals(stringStringMap.get("password"))) {
                     logger.info("====> " + "Login account " + stringStringMap);
                     clockInService.setAccount(stringStringMap);
                     clockInService.setDriver(driver);
@@ -65,7 +65,7 @@ public class ClockInController {
             @RequestBody Map<String, String> account
     ) {
         try {
-            if (account.get("username") != null && !account.get("username").equals("") && account.get("password") != null && !account.get("password").equals("")) {
+            if (account.get("username") != null && !"".equals(account.get("username")) && account.get("password") != null && !"".equals(account.get("password"))) {
                 logger.info("====> " + "Launch the application");
                 driver = appiumService.getAndroidDriver();
                 logger.info("====> " + "Login account " + account);
@@ -94,7 +94,7 @@ public class ClockInController {
             logger.info("====> " + "Launch the application");
             driver = appiumService.getAndroidDriver();
             for (Map<String, String> stringStringMap : accountTools.getAccount()) {
-                if (stringStringMap.get("username") != null && !stringStringMap.get("username").equals("") && stringStringMap.get("password") != null && !stringStringMap.get("password").equals("")) {
+                if (stringStringMap.get("username") != null && !"".equals(stringStringMap.get("username")) && stringStringMap.get("password") != null && !"".equals(stringStringMap.get("password"))) {
                     logger.info("====> " + "Login account " + stringStringMap);
                     clockInService.setAccount(stringStringMap);
                     clockInService.setDriver(driver);
