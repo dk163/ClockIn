@@ -3,23 +3,23 @@ package org.fish.appium.entity;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
 @Data
-@Configuration
-@ConfigurationProperties(prefix = "appium.config", ignoreUnknownFields = false)
 public class ConfigEntity {
-    private String udid;
-    private String deviceName;
-    private String deviceVersion;
-    private String devicePlatform;
-    private String applicationPackage;
     private String applicationActivity;
+    private String applicationPackage;
+    private String deviceName;
+    private String devicePlatform;
+    private String deviceVersion;
     private Boolean noReset;
+    private Long timeout;
+    private String udid;
     private String url;
     private Long wait;
-    private Long timeout;
+    private List<AccountEntity> account;
 }

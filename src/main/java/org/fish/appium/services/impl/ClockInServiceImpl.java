@@ -7,6 +7,8 @@ import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.functions.ExpectedCondition;
 import lombok.Getter;
 import lombok.Setter;
+import org.fish.appium.common.ConfigTool;
+import org.fish.appium.entity.AccountEntity;
 import org.fish.appium.entity.ConfigEntity;
 import org.fish.appium.entity.ElementEntity;
 import org.fish.appium.services.ClockInService;
@@ -16,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Map;
 
 import static io.appium.java_client.touch.WaitOptions.waitOptions;
 import static io.appium.java_client.touch.offset.PointOption.point;
@@ -27,14 +28,11 @@ import static java.time.Duration.ofMillis;
 @Service
 public class ClockInServiceImpl implements ClockInService {
     @Resource
-    private ConfigEntity configEntity;
-
-    @Resource
     private ElementEntity element;
 
     private Logger logger = (Logger) LoggerFactory.getLogger(this.getClass());
     private AndroidDriver<AndroidElement> driver;
-    private Map<String, String> account;
+    private AccountEntity account;
 
     @Override
     public void setDriver(AndroidDriver<AndroidElement> driver) {
@@ -42,7 +40,7 @@ public class ClockInServiceImpl implements ClockInService {
     }
 
     @Override
-    public void setAccount(Map<String, String> account) {
+    public void setAccount(AccountEntity account) {
         this.account = account;
     }
 
@@ -54,10 +52,10 @@ public class ClockInServiceImpl implements ClockInService {
         if (!byElementIsExist(driver, By.xpath(element.getVia()))) {
             try {
                 logger.info("====> " + "Login the application");
-                logger.info("====> " + "Input username " + account.get("username"));
-                waitForElement(driver, By.id(element.getUsername())).sendKeys(account.get("username"));
-                logger.info("====> " + "Input password " + account.get("password"));
-                waitForElement(driver, By.id(element.getPassword())).sendKeys(account.get("password"));
+                logger.info("====> " + "Input username " + account.getUsername());
+                waitForElement(driver, By.id(element.getUsername())).sendKeys(account.getUsername());
+                logger.info("====> " + "Input password " + account.getPassword());
+                waitForElement(driver, By.id(element.getPassword())).sendKeys(account.getPassword());
                 logger.info("====> " + "Check the agreement");
                 waitForElement(driver, By.id(element.getPrivacy())).click();
                 logger.info("====> " + "Click login");
@@ -76,7 +74,7 @@ public class ClockInServiceImpl implements ClockInService {
         } else {
             logger.info("====> " + "Examine name");
             waitForElement(driver, By.xpath(element.getVia())).click();
-            if (byElementIsExist(driver, By.xpath("//*[contains(@text, '" + account.get("name") + "')]"))) {
+            if (byElementIsExist(driver, By.xpath("//*[contains(@text, '" + account.getName() + "')]"))) {
                 try {
                     driver.navigate().back();
                     clock();
@@ -143,7 +141,9 @@ public class ClockInServiceImpl implements ClockInService {
 
     @Override
     public AndroidElement waitForElement(AndroidDriver<AndroidElement> driver, By locator) {
-        WebDriverWait web = new WebDriverWait(driver, configEntity.getTimeout());
+        ConfigTool configTool = new ConfigTool();
+        ConfigEntity config = configTool.loadConfig();
+        WebDriverWait web = new WebDriverWait(driver, config.getTimeout());
         return web.until((ExpectedCondition<AndroidElement>) input -> driver.findElement(locator));
     }
 

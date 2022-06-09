@@ -5,15 +5,13 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import lombok.Getter;
 import lombok.Setter;
+import org.fish.appium.common.ConfigTool;
 import org.fish.appium.entity.ConfigEntity;
 import org.fish.appium.services.AppiumService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
@@ -22,26 +20,22 @@ import java.util.concurrent.TimeUnit;
 @Setter
 @Service
 public class AppiumServiceImpl implements AppiumService {
-    private ConfigEntity configEntity;
-
-    @Autowired
-    public void setConfigEntity(ConfigEntity configEntity) {
-        this.configEntity = configEntity;
-    }
-
     private final DesiredCapabilities capabilities = new DesiredCapabilities();
     private AndroidDriver<AndroidElement> driver;
     private Logger logger = (Logger) LoggerFactory.getLogger(this.getClass());
 
-    @Bean
-    public void setup() {
-        capabilities.setCapability("udid", configEntity.getUdid());
-        capabilities.setCapability("deviceName", configEntity.getDeviceName());
-        capabilities.setCapability("deviceName", configEntity.getDeviceVersion());
-        capabilities.setCapability("platformName", configEntity.getDevicePlatform());
-        capabilities.setCapability("appPackage", configEntity.getApplicationPackage());
-        capabilities.setCapability("appActivity", configEntity.getApplicationActivity());
-        capabilities.setCapability("noReset", configEntity.getNoReset());
+    @Override
+    public DesiredCapabilities getCapabilities() {
+        ConfigTool configTool = new ConfigTool();
+        ConfigEntity config = configTool.loadConfig();
+        capabilities.setCapability("udid", config.getUdid());
+        capabilities.setCapability("deviceVersion", config.getDeviceVersion());
+        capabilities.setCapability("deviceName", config.getDeviceName());
+        capabilities.setCapability("platformName", config.getDevicePlatform());
+        capabilities.setCapability("appPackage", config.getApplicationPackage());
+        capabilities.setCapability("appActivity", config.getApplicationActivity());
+        capabilities.setCapability("noReset", config.getNoReset());
+        return capabilities;
     }
 
     @Override
@@ -49,14 +43,11 @@ public class AppiumServiceImpl implements AppiumService {
         if (driver != null) {
             driver = null;
         }
+        ConfigTool configTool = new ConfigTool();
+        ConfigEntity config = configTool.loadConfig();
         logger.info("<==== " + getCapabilities().toString());
-        driver = new AndroidDriver<>(new URL(configEntity.getUrl()), getCapabilities());
-        driver.manage().timeouts().implicitlyWait(configEntity.getWait(), TimeUnit.SECONDS);
+        driver = new AndroidDriver<>(new URL(config.getUrl()), getCapabilities());
+        driver.manage().timeouts().implicitlyWait(config.getWait(), TimeUnit.SECONDS);
         return driver;
-    }
-
-    @Override
-    public DesiredCapabilities getCapabilities() {
-        return capabilities;
     }
 }

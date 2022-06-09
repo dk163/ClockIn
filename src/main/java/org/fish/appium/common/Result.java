@@ -12,17 +12,9 @@ import java.util.Map;
 @Setter
 public class Result extends LinkedHashMap<String, Object> {
     private static final long serialVersionUID = 1L;
-
-    //    @ApiModelProperty(value = "version")
-    private final String version = "1.0.2";
-
-    //    @ApiModelProperty(value = "code")
+    private final String version = "1.2.0";
     private Integer code;
-
-    //    @ApiModelProperty(value = "message")
     private String message;
-
-    //    @ApiModelProperty(value = "data")
     private Map<String, Object> result = new LinkedHashMap<>();
 
     public Result() {
@@ -57,6 +49,13 @@ public class Result extends LinkedHashMap<String, Object> {
         Result r = new Result();
         r.put("code", HttpStatus.SC_OK);
         r.put("result", list);
+        return r;
+    }
+
+    public static Result ok(Object obj) {
+        Result r = new Result();
+        r.put("code", HttpStatus.SC_OK);
+        r.put("result", obj);
         return r;
     }
 

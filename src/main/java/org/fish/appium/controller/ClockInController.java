@@ -5,12 +5,15 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import lombok.Getter;
 import lombok.Setter;
-import org.fish.appium.entity.AccountEntity;
+import org.fish.appium.common.ConfigTool;
 import org.fish.appium.common.Result;
+import org.fish.appium.entity.AccountEntity;
+import org.fish.appium.entity.ConfigEntity;
 import org.fish.appium.services.AppiumService;
 import org.fish.appium.services.ClockInService;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -26,23 +28,27 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @Getter
 @Setter
 @RestController
+@RequestMapping("/clock")
+@CrossOrigin
 public class ClockInController {
     @Resource
     private AppiumService appiumService;
+
     @Resource
     private ClockInService clockInService;
-    @Resource
-    private AccountEntity accountTools;
+
     private AndroidDriver<AndroidElement> driver;
     private Logger logger = (Logger) LoggerFactory.getLogger(this.getClass());
 
-    @RequestMapping(value = "/clock/in", method = GET)
+    @RequestMapping(value = "/in", method = GET)
     public Result clockIn() {
+        ConfigTool configTool = new ConfigTool();
+        ConfigEntity config = configTool.loadConfig();
         try {
             logger.info("====> " + "Launch the application");
             driver = appiumService.getAndroidDriver();
-            for (Map<String, String> stringStringMap : accountTools.getAccount()) {
-                if (stringStringMap.get("username") != null && !"".equals(stringStringMap.get("username")) && stringStringMap.get("password") != null && !"".equals(stringStringMap.get("password"))) {
+            for (AccountEntity stringStringMap : config.getAccount()) {
+                if (stringStringMap.getUsername() != null && !"".equals(stringStringMap.getUsername()) && stringStringMap.getPassword() != null && !"".equals(stringStringMap.getPassword())) {
                     logger.info("====> " + "Login account " + stringStringMap);
                     clockInService.setAccount(stringStringMap);
                     clockInService.setDriver(driver);
@@ -60,12 +66,10 @@ public class ClockInController {
         }
     }
 
-    @RequestMapping(value = "/clock/in", method = POST)
-    public Result clockInAction(
-            @RequestBody Map<String, String> account
-    ) {
+    @RequestMapping(value = "/in", method = POST)
+    public Result clockInAction(@RequestBody AccountEntity account) {
         try {
-            if (account.get("username") != null && !"".equals(account.get("username")) && account.get("password") != null && !"".equals(account.get("password"))) {
+            if (account.getUsername() != null && !"".equals(account.getUsername()) && account.getPassword() != null && !"".equals(account.getPassword())) {
                 logger.info("====> " + "Launch the application");
                 driver = appiumService.getAndroidDriver();
                 logger.info("====> " + "Login account " + account);
@@ -86,6 +90,8 @@ public class ClockInController {
 
     @Scheduled(cron = "0 25 9 ? * MON-FRI")
     public void scheduledClockIn() {
+        ConfigTool configTool = new ConfigTool();
+        ConfigEntity config = configTool.loadConfig();
         try {
             List<Integer> list = Arrays.asList(60000, 120000, 180000, 240000);
             int index = (int) (Math.random() * list.size());
@@ -93,8 +99,8 @@ public class ClockInController {
             logger.info("====> " + "Scheduled start");
             logger.info("====> " + "Launch the application");
             driver = appiumService.getAndroidDriver();
-            for (Map<String, String> stringStringMap : accountTools.getAccount()) {
-                if (stringStringMap.get("username") != null && !"".equals(stringStringMap.get("username")) && stringStringMap.get("password") != null && !"".equals(stringStringMap.get("password"))) {
+            for (AccountEntity stringStringMap : config.getAccount()) {
+                if (stringStringMap.getUsername() != null && !"".equals(stringStringMap.getUsername()) && stringStringMap.getPassword() != null && !"".equals(stringStringMap.getPassword())) {
                     logger.info("====> " + "Login account " + stringStringMap);
                     clockInService.setAccount(stringStringMap);
                     clockInService.setDriver(driver);
