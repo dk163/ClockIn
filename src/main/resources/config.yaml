@@ -1,7 +1,7 @@
 
 !!org.fish.appium.entity.ConfigEntity
 account:
-- {name: 梁家豪, password: dove@24680, username: '15322929549'}
+- {name: Name, password: Password, username: 'Username'}
 applicationActivity: com.alibaba.android.rimet.biz.LaunchHomeActivity
 applicationPackage: com.alibaba.android.rimet
 deviceName: Android
