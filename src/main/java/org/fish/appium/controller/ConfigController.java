@@ -6,6 +6,7 @@ import org.fish.appium.common.Result;
 import org.fish.appium.entity.AccountEntity;
 import org.fish.appium.entity.ConfigEntity;
 import org.fish.appium.services.ConfigService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -16,8 +17,12 @@ import javax.annotation.Resource;
 @RequestMapping("/config")
 @CrossOrigin
 public class ConfigController {
-    @Resource
     private ConfigService configService;
+
+    @Autowired
+    public void setConfigService(ConfigService configService) {
+        this.configService = configService;
+    }
 
     @GetMapping(value = "/get")
     public Result getConfig() {
@@ -35,13 +40,13 @@ public class ConfigController {
         account.setName(name);
         account.setUsername(username);
         account.setPassword(password);
-        configService.setAccount(account);
-        return Result.ok("OK!");
+        ConfigEntity config = configService.setAccount(account);
+        return Result.ok(config);
     }
 
     @GetMapping(value = "/udid")
     public Result setUdid(@RequestParam(name = "udid") String udid) {
-        configService.setUdid(udid);
-        return Result.ok("OK!");
+        ConfigEntity config = configService.setUdid(udid);
+        return Result.ok(config);
     }
 }

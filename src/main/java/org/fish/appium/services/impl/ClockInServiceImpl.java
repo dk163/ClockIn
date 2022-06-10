@@ -7,7 +7,6 @@ import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.functions.ExpectedCondition;
 import lombok.Getter;
 import lombok.Setter;
-import org.fish.appium.common.ConfigTool;
 import org.fish.appium.entity.AccountEntity;
 import org.fish.appium.entity.ConfigEntity;
 import org.fish.appium.entity.ElementEntity;
@@ -15,9 +14,8 @@ import org.fish.appium.services.ClockInService;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 
 import static io.appium.java_client.touch.WaitOptions.waitOptions;
 import static io.appium.java_client.touch.offset.PointOption.point;
@@ -27,8 +25,20 @@ import static java.time.Duration.ofMillis;
 @Setter
 @Service
 public class ClockInServiceImpl implements ClockInService {
-    @Resource
+    private ConfigEntity config;
+
+    @Autowired
+    public void setConfigEntity(ConfigEntity config) {
+        this.config = config;
+    }
+
     private ElementEntity element;
+
+    @Autowired
+    public void setElementEntity(ElementEntity element) {
+        this.element = element;
+    }
+
 
     private Logger logger = (Logger) LoggerFactory.getLogger(this.getClass());
     private AndroidDriver<AndroidElement> driver;
@@ -141,8 +151,6 @@ public class ClockInServiceImpl implements ClockInService {
 
     @Override
     public AndroidElement waitForElement(AndroidDriver<AndroidElement> driver, By locator) {
-        ConfigTool configTool = new ConfigTool();
-        ConfigEntity config = configTool.loadConfig();
         WebDriverWait web = new WebDriverWait(driver, config.getTimeout());
         return web.until((ExpectedCondition<AndroidElement>) input -> driver.findElement(locator));
     }

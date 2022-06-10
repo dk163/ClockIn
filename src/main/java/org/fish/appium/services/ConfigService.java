@@ -5,6 +5,6 @@ import org.fish.appium.entity.ConfigEntity;
 
 public interface ConfigService {
     ConfigEntity configInfo();
-    void setAccount(AccountEntity account);
-    void setUdid(String udid);
+    ConfigEntity setAccount(AccountEntity account);
+    ConfigEntity setUdid(String udid);
 }
