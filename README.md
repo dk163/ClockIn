@@ -5,8 +5,14 @@
 ## 安装Appium Server
 
 ```shell
-# 安装Node js
-https://nodejs.org/zh-cn/
+# 安装Nvm
+choco install nvm –version 1.1.9
+
+# 安装Node
+nvm install v16.14.2
+
+# 检查Node是否安装
+node --version
 
 # 更新npm
 npm install npm@latest -g
