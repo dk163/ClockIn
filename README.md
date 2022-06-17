@@ -1,10 +1,27 @@
 # ClockIn
 
-使用闲置的手机 配合Appium 实现钉钉自动蓝牙打卡
+手机配合Appium 实现钉钉自动蓝牙打卡
 
-## 启动方式
+## 安装Appium Server
 
-```yacas
+```shell
+npm install -g appium
+```
+
+## 配置ANDROID_HOME
+
+```shell
+将Android SDK的目录放到环境变量
+```
+
+## 使用Powershell启动
+
+```shell
+# 启动Appium
+# 将 E:\Document\Test\Appium.log 修改为自定义log路径
+Start-Job -name appium -ScriptBlock { appium -p 4723 >> E:\Document\Test\Appium.log }
+
+# 启动ClockIn
 java -jar ./ClockIn-Version.1.2.0.jar
 ```
 
