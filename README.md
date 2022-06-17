@@ -13,7 +13,9 @@ choco install nvm –version 1.1.9
 
 # 安装Node
 nvm install v16.14.2
+nvm use 16.14.2
 
+# 重启Powershell
 # 检查Node是否安装
 node --version
 
