@@ -2,7 +2,7 @@
 
 手机配合Appium 实现钉钉自动蓝牙打卡
 
-## 安装Appium Server
+## 安装Appium Server 此处使用管理员运行Powershell
 
 ```shell
 # 安装Choco
@@ -30,7 +30,7 @@ npm install -g appium
 将Android SDK的目录放到环境变量
 ```
 
-## 使用Powershell启动
+## 此处使用管理员运行Powershell
 
 ```shell
 # 启动Appium
