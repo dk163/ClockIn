@@ -5,6 +5,9 @@
 ## 安装Appium Server
 
 ```shell
+# 安装Choco
+Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
 # 安装Nvm
 choco install nvm –version 1.1.9
 
