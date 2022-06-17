@@ -5,6 +5,13 @@
 ## 安装Appium Server
 
 ```shell
+# 安装Node js
+https://nodejs.org/zh-cn/
+
+# 更新npm
+npm install npm@latest -g
+
+# 安装Appium Server
 npm install -g appium
 ```
 
