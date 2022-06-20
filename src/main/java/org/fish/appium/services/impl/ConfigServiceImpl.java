@@ -59,4 +59,23 @@ public class ConfigServiceImpl implements ConfigService {
         }
         return (ConfigEntity)SpringContextUtil.getBean("configEntity");
     }
+
+    @Override
+    public ConfigEntity setCron(String cron) {
+        ApplicationContext applicationContext = SpringContextUtil.getApplicationContext();
+        Class<?> beanType = applicationContext.getType("configEntity");
+        assert beanType != null;
+        Field[] declaredFields = beanType.getDeclaredFields();
+        for (Field field : declaredFields) {
+            Object beanObject = applicationContext.getBean("configEntity");
+            try {
+                if ("cron".equals(field.getName())) {
+                    SpringContextUtil.setFieldData(field, beanObject, cron);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return (ConfigEntity)SpringContextUtil.getBean("configEntity");
+    }
 }

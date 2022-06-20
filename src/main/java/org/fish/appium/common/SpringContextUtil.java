@@ -2,12 +2,9 @@ package org.fish.appium.common;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
-import java.util.Date;
 
 @Component
 public class SpringContextUtil {

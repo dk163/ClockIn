@@ -26,4 +26,6 @@ public class ConfigEntity {
     private String url;
     private Long wait;
     private List<AccountEntity> account;
+
+    private String cron;
 }
