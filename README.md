@@ -2,6 +2,8 @@
 
 手机配合Appium 实现钉钉自动蓝牙打卡
 
+定时任务实现定时启动
+
 ## 安装Appium Server 此处使用管理员运行Powershell
 
 ```shell
@@ -137,6 +139,45 @@ adb devices
                 "username": "Fish"
             }
         ]
+    }
+}
+```
+
+```yacas
+# 修改定时任务时间
+http://127.0.0.1:9090/config/cron?cron=0 32 17 ? * MON-FRI
+
+# 默认值
+# 每周五9:25:00启动
+0 25 9 ? * MON-FRI
+
+# Cron参考
+https://www.bejson.com/othertools/cron/
+
+# Response
+{
+    "version": "1.2.0",
+    "code": 200,
+    "messages": "Success!",
+    "result": {
+        "applicationActivity": "com.alibaba.android.rimet.biz.LaunchHomeActivity",
+        "applicationPackage": "com.alibaba.android.rimet",
+        "deviceName": "Android",
+        "devicePlatform": "Android",
+        "deviceVersion": "10",
+        "noReset": true,
+        "timeout": 20,
+        "udid": "Z81QAEYPA725H",
+        "url": "http://127.0.0.1:4723/wd/hub",
+        "wait": 10,
+        "account": [
+            {
+                "name": "Fish",
+                "password": "Fish",
+                "username": "Fish"
+            }
+        ],
+        "cron": "0 32 17 ? * MON-FRI"
     }
 }
 ```
