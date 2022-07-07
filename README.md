@@ -15,7 +15,7 @@ choco install nvm –version 1.1.9
 
 # 安装Node
 nvm install v16.14.2
-nvm use 16.14.2
+nvm use v16.14.2
 
 # 重启Powershell
 # 检查Node是否安装
@@ -26,6 +26,25 @@ npm install npm@latest -g
 
 # 安装Appium Server
 npm install -g appium
+```
+
+## Powershell禁止运行脚本问题
+
+```shell
+npm : 无法加载文件 D:\dev\node-v16.14.2-win-x64\npm.ps1，因为在此系统上禁止运行脚本。有关详细信息，请参阅 https:/go.microsoft.com/fwlink/?LinkID=135170 中的 about_E170 中的 about_E
+xecution_Policies。
+所在位置 行:1 字符: 1
++ npm
++ ~~~
+    + CategoryInfo          : SecurityError: (:) []，PSSecurityException
+    + FullyQualifiedErrorId : UnauthorizedAccess
+```
+
+```shell
+# 解决方法
+# 管理员模式打开Powershell
+# 输入以下命令
+set-ExecutionPolicy RemoteSigned
 ```
 
 ## 配置ANDROID_HOME
