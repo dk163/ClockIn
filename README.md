@@ -1,9 +1,5 @@
 # ClockIn
 
-手机配合Appium 实现钉钉自动蓝牙打卡
-
-定时任务实现定时启动
-
 ## 安装Appium Server 此处使用管理员运行Powershell
 
 ```shell
