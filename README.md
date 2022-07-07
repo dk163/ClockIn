@@ -10,6 +10,9 @@
 # 安装Choco
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
+# 更新
+choco upgrade chocolatey
+
 # 安装Nvm
 choco install nvm –version 1.1.9
 
