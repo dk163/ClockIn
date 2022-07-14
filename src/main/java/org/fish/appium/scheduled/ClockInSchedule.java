@@ -76,8 +76,8 @@ public class ClockInSchedule implements ScheduleObjectInterface {
                             break;
                         }
                     }
-                    clockInService.quit();
                 } catch (Exception e) {
+                    clockInService.quit();
                     logger.error("====> " + e.getMessage());
                 }
             }
