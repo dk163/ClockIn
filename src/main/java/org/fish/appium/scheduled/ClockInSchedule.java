@@ -5,6 +5,7 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.fish.appium.entity.AccountEntity;
 import org.fish.appium.entity.ConfigEntity;
@@ -29,33 +30,23 @@ import java.util.concurrent.ScheduledFuture;
 @Data
 @Configuration
 @EnableScheduling
+@NoArgsConstructor
 public class ClockInSchedule implements ScheduleObjectInterface {
     private ScheduledFuture future;
-    private TaskScheduler scheduler;
 
-    @Autowired
-    public void setScheduler(TaskScheduler scheduler) {
-        this.scheduler = scheduler;
-    }
+    private TaskScheduler scheduler;
 
     private AppiumService appiumService;
 
-    @Autowired
-    public void setAppiumService(AppiumService appiumService) {
-        this.appiumService = appiumService;
-    }
-
     private ClockInService clockInService;
-
-    @Autowired
-    public void setClockInService(ClockInService clockInService) {
-        this.clockInService = clockInService;
-    }
 
     private ConfigEntity config;
 
     @Autowired
-    public void setConfigEntity(ConfigEntity config) {
+    public ClockInSchedule(TaskScheduler scheduler, AppiumService appiumService, ClockInService clockInService, ConfigEntity config) {
+        this.scheduler = scheduler;
+        this.appiumService = appiumService;
+        this.clockInService = clockInService;
         this.config = config;
     }
 

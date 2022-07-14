@@ -6,6 +6,7 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.functions.ExpectedCondition;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.fish.appium.entity.AccountEntity;
 import org.fish.appium.entity.ConfigEntity;
@@ -15,6 +16,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import static io.appium.java_client.touch.WaitOptions.waitOptions;
@@ -24,21 +26,17 @@ import static java.time.Duration.ofMillis;
 @Getter
 @Setter
 @Service
+@NoArgsConstructor
 public class ClockInServiceImpl implements ClockInService {
     private ConfigEntity config;
-
-    @Autowired
-    public void setConfigEntity(ConfigEntity config) {
-        this.config = config;
-    }
 
     private ElementEntity element;
 
     @Autowired
-    public void setElementEntity(ElementEntity element) {
+    public ClockInServiceImpl(ConfigEntity config, ElementEntity element) {
+        this.config = config;
         this.element = element;
     }
-
 
     private Logger logger = (Logger) LoggerFactory.getLogger(this.getClass());
     private AndroidDriver<AndroidElement> driver;
@@ -54,6 +52,7 @@ public class ClockInServiceImpl implements ClockInService {
         this.account = account;
     }
 
+    @Async("AsyncTaskExecutor")
     @Override
     public void login() throws InterruptedException {
         String capabilities = driver.getCapabilities().toString();
@@ -120,6 +119,7 @@ public class ClockInServiceImpl implements ClockInService {
                 break;
             }
         }
+        quit();
     }
 
     @Override

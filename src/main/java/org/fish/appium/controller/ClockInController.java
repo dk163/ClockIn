@@ -28,22 +28,14 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class ClockInController {
     private AppiumService appiumService;
 
-    @Autowired
-    public void setAppiumService(AppiumService appiumService) {
-        this.appiumService = appiumService;
-    }
-
     private ClockInService clockInService;
-
-    @Autowired
-    public void setClockInService(ClockInService clockInService) {
-        this.clockInService = clockInService;
-    }
 
     private ConfigEntity config;
 
     @Autowired
-    public void setConfigEntity(ConfigEntity config) {
+    public ClockInController(AppiumService appiumService, ClockInService clockInService, ConfigEntity config) {
+        this.appiumService = appiumService;
+        this.clockInService = clockInService;
         this.config = config;
     }
 
@@ -66,9 +58,9 @@ public class ClockInController {
                     return Result.error("Username and Password can not be empty!");
                 }
             }
-            clockInService.quit();
             return Result.ok("OK!");
         } catch (Exception e) {
+            clockInService.quit();
             logger.error("<==== " + e.getMessage());
             return Result.error(e.getMessage());
         }
@@ -84,13 +76,13 @@ public class ClockInController {
                 clockInService.setAccount(account);
                 clockInService.setDriver(driver);
                 clockInService.login();
-                clockInService.quit();
                 return Result.ok("OK!");
             } else {
                 logger.error("====> " + "Username and Password can not be empty!");
                 return Result.error("Username and Password can not be empty!");
             }
         } catch (Exception e) {
+            clockInService.quit();
             logger.error("<==== " + e.getMessage());
             return Result.error(e.getMessage());
         }

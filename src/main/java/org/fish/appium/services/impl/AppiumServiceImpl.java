@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Logger;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.fish.appium.entity.ConfigEntity;
 import org.fish.appium.services.AppiumService;
@@ -19,11 +20,12 @@ import java.util.concurrent.TimeUnit;
 @Getter
 @Setter
 @Service
+@NoArgsConstructor
 public class AppiumServiceImpl implements AppiumService {
     private ConfigEntity config;
 
     @Autowired
-    public void setConfigEntity(ConfigEntity config) {
+    public AppiumServiceImpl(ConfigEntity config) {
         this.config = config;
     }
 

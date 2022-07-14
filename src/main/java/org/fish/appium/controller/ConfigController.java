@@ -18,15 +18,11 @@ import org.springframework.web.bind.annotation.*;
 public class ConfigController {
     private ConfigService configService;
 
-    @Autowired
-    public void setConfigService(ConfigService configService) {
-        this.configService = configService;
-    }
-
     public ClockInSchedule schedule;
 
     @Autowired
-    public void setSchedule(ClockInSchedule schedule) {
+    public ConfigController(ConfigService configService, ClockInSchedule schedule) {
+        this.configService = configService;
         this.schedule = schedule;
     }
 

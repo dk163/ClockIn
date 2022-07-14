@@ -1,5 +1,8 @@
 package org.fish.appium.services.impl;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.fish.appium.common.SpringContextUtil;
 import org.fish.appium.entity.AccountEntity;
 import org.fish.appium.entity.ConfigEntity;
@@ -11,7 +14,10 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 @Service
+@NoArgsConstructor
 public class ConfigServiceImpl implements ConfigService {
 
     @Override
