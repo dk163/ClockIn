@@ -97,6 +97,7 @@ public class ClockInServiceImpl implements ClockInService {
                 }
             } else {
                 logger.info("====> " + "Log out");
+                driver.navigate().back();
                 logout();
                 login();
             }
