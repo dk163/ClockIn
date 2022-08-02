@@ -2,7 +2,6 @@ package org.fish.appium.services.impl;
 
 import ch.qos.logback.classic.Logger;
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.android.AndroidElement;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 @Getter
 @Setter
@@ -30,7 +29,7 @@ public class AppiumServiceImpl implements AppiumService {
     }
 
     private final DesiredCapabilities capabilities = new DesiredCapabilities();
-    private AndroidDriver<AndroidElement> driver;
+    private AndroidDriver driver;
     private Logger logger = (Logger) LoggerFactory.getLogger(this.getClass());
 
     @Override
@@ -46,13 +45,13 @@ public class AppiumServiceImpl implements AppiumService {
     }
 
     @Override
-    public AndroidDriver<AndroidElement> getAndroidDriver() throws MalformedURLException {
+    public AndroidDriver getAndroidDriver() throws MalformedURLException {
         if (driver != null) {
             driver = null;
         }
         logger.info("<==== " + getCapabilities().toString());
-        driver = new AndroidDriver<>(new URL(config.getUrl()), getCapabilities());
-        driver.manage().timeouts().implicitlyWait(config.getWait(), TimeUnit.SECONDS);
+        driver = new AndroidDriver(new URL(config.getUrl()), getCapabilities());
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(config.getWait()));
         return driver;
     }
 }

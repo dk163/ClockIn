@@ -2,10 +2,7 @@ package org.fish.appium.scheduled;
 
 import ch.qos.logback.classic.Logger;
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.android.AndroidElement;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.fish.appium.entity.AccountEntity;
 import org.fish.appium.entity.ConfigEntity;
@@ -20,6 +17,7 @@ import org.springframework.scheduling.TriggerContext;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.support.CronTrigger;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -27,12 +25,10 @@ import java.util.concurrent.ScheduledFuture;
 
 @Getter
 @Setter
-@Data
 @Configuration
 @EnableScheduling
-@NoArgsConstructor
 public class ClockInSchedule implements ScheduleObjectInterface {
-    private ScheduledFuture future;
+    private ScheduledFuture<?> future;
 
     private TaskScheduler scheduler;
 
@@ -50,7 +46,7 @@ public class ClockInSchedule implements ScheduleObjectInterface {
         this.config = config;
     }
 
-    private AndroidDriver<AndroidElement> driver;
+    private AndroidDriver driver;
     private Logger logger = (Logger) LoggerFactory.getLogger(this.getClass());
 
     @Override
@@ -83,7 +79,7 @@ public class ClockInSchedule implements ScheduleObjectInterface {
             }
         }, new Trigger() {
             @Override
-            public Date nextExecutionTime(TriggerContext triggerContext) {
+            public Date nextExecutionTime(@Nonnull TriggerContext triggerContext) {
                 String cron = config.getCron();
                 CronTrigger trigger = new CronTrigger(cron);
                 return trigger.nextExecutionTime(triggerContext);

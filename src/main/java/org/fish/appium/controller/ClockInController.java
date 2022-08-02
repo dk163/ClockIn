@@ -2,7 +2,6 @@ package org.fish.appium.controller;
 
 import ch.qos.logback.classic.Logger;
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.android.AndroidElement;
 import lombok.Getter;
 import lombok.Setter;
 import org.fish.appium.common.Result;
@@ -39,7 +38,7 @@ public class ClockInController {
         this.config = config;
     }
 
-    private AndroidDriver<AndroidElement> driver;
+    private AndroidDriver driver;
     private Logger logger = (Logger) LoggerFactory.getLogger(this.getClass());
 
     @RequestMapping(value = "/in", method = GET)
