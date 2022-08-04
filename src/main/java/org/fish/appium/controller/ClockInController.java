@@ -59,7 +59,7 @@ public class ClockInController {
             }
             return Result.ok("OK!");
         } catch (Exception e) {
-            clockInService.quit();
+            clockInService.quit(driver);
             logger.error("<==== " + e.getMessage());
             return Result.error(e.getMessage());
         }
@@ -81,7 +81,7 @@ public class ClockInController {
                 return Result.error("Username and Password can not be empty!");
             }
         } catch (Exception e) {
-            clockInService.quit();
+            clockInService.quit(driver);
             logger.error("<==== " + e.getMessage());
             return Result.error(e.getMessage());
         }

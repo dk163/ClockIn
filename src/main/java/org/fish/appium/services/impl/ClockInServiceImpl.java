@@ -66,7 +66,7 @@ public class ClockInServiceImpl implements ClockInService {
                 driver.findElement(By.id(element.getPrivacy())).click();
                 logger.info("====> " + "Click login");
                 driver.findElement(By.id(element.getLogin())).click();
-                clock();
+                clock(driver);
             } catch (Exception e) {
                 logger.error("<==== " + e.getMessage());
                 if (e.toString().startsWith("Unable to create a new remote session.")) {
@@ -83,7 +83,7 @@ public class ClockInServiceImpl implements ClockInService {
             if (byElementIsExist(driver, By.xpath("//*[contains(@text, '" + account.getName() + "')]"))) {
                 try {
                     driver.navigate().back();
-                    clock();
+                    clock(driver);
                 } catch (Exception e) {
                     e.printStackTrace();
                     logger.error("<==== " + e.getMessage());
@@ -95,14 +95,14 @@ public class ClockInServiceImpl implements ClockInService {
             } else {
                 logger.info("====> " + "Log out");
                 driver.navigate().back();
-                logout();
+                logout(driver);
                 login();
             }
         }
     }
 
     @Override
-    public void clock() {
+    public void clock(AndroidDriver driver) {
         logger.info("====> " + "Enter workbench");
         driver.findElement(By.xpath(element.getWork())).click();
         while (true) {
@@ -117,11 +117,11 @@ public class ClockInServiceImpl implements ClockInService {
                 break;
             }
         }
-        quit();
+        quit(driver);
     }
 
     @Override
-    public void logout() {
+    public void logout(AndroidDriver driver) {
         String capabilities = driver.getCapabilities().toString();
         int width = driver.manage().window().getSize().width;
         logger.info("====> Width: " + width);
@@ -142,11 +142,12 @@ public class ClockInServiceImpl implements ClockInService {
                 logger.error("<==== " + e.getMessage());
                 driver.terminateApp(config.getApplicationPackage());
                 driver.launchApp();
-                logout();
+                logout(driver);
             }
         }
     }
 
+    @Override
     public Boolean byElementIsExist(AndroidDriver driver, By locator) {
         try {
             driver.findElement(locator);
@@ -157,7 +158,7 @@ public class ClockInServiceImpl implements ClockInService {
     }
 
     @Override
-    public void quit() {
+    public void quit(AndroidDriver driver) {
         logger.info("====> " + "Driver lock");
         driver.lockDevice();
         logger.info("====> " + "Driver quit");

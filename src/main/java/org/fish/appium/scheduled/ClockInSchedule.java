@@ -73,7 +73,7 @@ public class ClockInSchedule implements ScheduleObjectInterface {
                         }
                     }
                 } catch (Exception e) {
-                    clockInService.quit();
+                    clockInService.quit(driver);
                     logger.error("====> " + e.getMessage());
                 }
             }

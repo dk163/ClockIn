@@ -7,6 +7,5 @@ public interface ConfigService {
     ConfigEntity configInfo();
     ConfigEntity setAccount(AccountEntity account);
     ConfigEntity setUdid(String udid);
-
     ConfigEntity setCron(String cron);
 }

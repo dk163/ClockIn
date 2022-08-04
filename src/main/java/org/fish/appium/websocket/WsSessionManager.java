@@ -37,6 +37,7 @@ public class WsSessionManager {
             try {
                 // 关闭连接
                 session.close();
+                System.out.printf(String.format("User-%s 连接已断开%n", key));
             } catch (IOException e) {
                 // todo: 关闭出现异常处理
                 e.printStackTrace();
