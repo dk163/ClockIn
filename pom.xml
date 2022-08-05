@@ -10,7 +10,7 @@
     </parent>
     <groupId>org.fish</groupId>
     <artifactId>ClockIn</artifactId>
-    <version>Version.1.2.0</version>
+    <version>Version.2.0.0</version>
     <name>AppiumDemo</name>
     <description>AppiumDemo</description>
 
