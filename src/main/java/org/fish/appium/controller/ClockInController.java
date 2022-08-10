@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -42,15 +44,14 @@ public class ClockInController {
     private Logger logger = (Logger) LoggerFactory.getLogger(this.getClass());
 
     @RequestMapping(value = "/in", method = GET)
-    public Result clockIn() {
+    public Result clockIn() throws IOException {
         try {
             logger.info("====> " + "Launch the application");
             driver = appiumService.getAndroidDriver();
             for (AccountEntity stringStringMap : config.getAccount()) {
                 if (stringStringMap.getUsername() != null && !"".equals(stringStringMap.getUsername()) && stringStringMap.getPassword() != null && !"".equals(stringStringMap.getPassword())) {
                     logger.info("====> " + "Login account " + stringStringMap);
-                    clockInService.setAccount(stringStringMap);
-                    clockInService.setDriver(driver);
+                    clockInService.setting(driver, stringStringMap, null);
                     clockInService.login();
                 } else {
                     logger.error("====> " + "Username and Password can not be empty!");
@@ -66,14 +67,13 @@ public class ClockInController {
     }
 
     @RequestMapping(value = "/in", method = POST)
-    public Result clockInAction(@RequestBody AccountEntity account) {
+    public Result clockInAction(@RequestBody AccountEntity account) throws IOException {
         try {
             if (account.getUsername() != null && !"".equals(account.getUsername()) && account.getPassword() != null && !"".equals(account.getPassword())) {
                 logger.info("====> " + "Launch the application");
                 driver = appiumService.getAndroidDriver();
                 logger.info("====> " + "Login account " + account);
-                clockInService.setAccount(account);
-                clockInService.setDriver(driver);
+                clockInService.setting(driver, account, null);
                 clockInService.login();
                 return Result.ok("OK!");
             } else {

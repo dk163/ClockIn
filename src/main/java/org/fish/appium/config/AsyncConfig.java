@@ -15,7 +15,7 @@ public class AsyncConfig {
 
     private static final int CORE_POOL_SIZE = 20;
 
-    @Bean
+    @Bean(name = "AsyncTaskExecutor")
     public AsyncTaskExecutor asyncTaskExecutor() {
         ThreadPoolTaskExecutor asyncTaskExecutor = new ThreadPoolTaskExecutor();
         asyncTaskExecutor.setMaxPoolSize(MAX_POOL_SIZE);

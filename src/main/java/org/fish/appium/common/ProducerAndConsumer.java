@@ -3,7 +3,6 @@ package org.fish.appium.common;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -50,17 +49,5 @@ class ProducerAndConsumer {
                 System.out.println("Consumer-Close");
             }
         }).start();
-    }
-
-    public static void main(String[] args) throws InterruptedException {
-        ProducerAndConsumer demo = new ProducerAndConsumer();
-        demo.STATE = true;
-        demo.consumer();
-        while (demo.STATE) {
-            Scanner sc=new Scanner(System.in);
-            System.out.println("请输入内容: ");
-            demo.DEVICE_STATUS_QUEUE.put(sc.next());
-            System.out.println("队列内容: " + demo.DEVICE_STATUS_QUEUE);
-        }
     }
 }

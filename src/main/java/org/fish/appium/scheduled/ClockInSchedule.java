@@ -18,6 +18,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.support.CronTrigger;
 
 import javax.annotation.Nonnull;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -46,8 +47,8 @@ public class ClockInSchedule implements ScheduleObjectInterface {
         this.config = config;
     }
 
-    private AndroidDriver driver;
     private Logger logger = (Logger) LoggerFactory.getLogger(this.getClass());
+    private AndroidDriver driver;
 
     @Override
     public void start() {
@@ -64,8 +65,7 @@ public class ClockInSchedule implements ScheduleObjectInterface {
                     for (AccountEntity stringStringMap : config.getAccount()) {
                         if (stringStringMap.getUsername() != null && !"".equals(stringStringMap.getUsername()) && stringStringMap.getPassword() != null && !"".equals(stringStringMap.getPassword())) {
                             logger.info("====> " + "Login account " + stringStringMap);
-                            clockInService.setAccount(stringStringMap);
-                            clockInService.setDriver(driver);
+                            clockInService.setting(driver, stringStringMap, null);
                             clockInService.login();
                         } else {
                             logger.error("====> " + "Username and Password can not be empty!");
@@ -73,7 +73,11 @@ public class ClockInSchedule implements ScheduleObjectInterface {
                         }
                     }
                 } catch (Exception e) {
-                    clockInService.quit(driver);
+                    try {
+                        clockInService.quit(driver);
+                    } catch (IOException ex) {
+                        logger.error("====> " + e.getMessage());
+                    }
                     logger.error("====> " + e.getMessage());
                 }
             }

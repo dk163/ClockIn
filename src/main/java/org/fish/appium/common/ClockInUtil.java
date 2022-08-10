@@ -1,6 +1,8 @@
 package org.fish.appium.common;
 
 import io.appium.java_client.android.AndroidDriver;
+import lombok.Getter;
+import lombok.Setter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.interactions.PointerInput;
@@ -10,7 +12,9 @@ import java.util.Collections;
 
 import static java.time.Duration.ofMillis;
 
-public class AppiumUtils {
+@Getter
+@Setter
+public class ClockInUtil {
 
     public static Boolean byElementIsExist(AndroidDriver driver, By locator) {
         try {
