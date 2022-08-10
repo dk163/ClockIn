@@ -1,11 +1,11 @@
 package org.fish.appium.services.impl;
 
 import ch.qos.logback.classic.Logger;
-import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.fish.appium.common.AppiumUtils;
 import org.fish.appium.entity.AccountEntity;
 import org.fish.appium.entity.ConfigEntity;
 import org.fish.appium.entity.ElementEntity;
@@ -15,10 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
-import static io.appium.java_client.touch.WaitOptions.waitOptions;
-import static io.appium.java_client.touch.offset.PointOption.point;
-import static java.time.Duration.ofMillis;
 
 @Getter
 @Setter
@@ -55,7 +51,7 @@ public class ClockInServiceImpl implements ClockInService {
         String capabilities = driver.getCapabilities().toString();
         logger.info("<==== " + capabilities);
         Thread.sleep(10000);
-        if (!byElementIsExist(driver, By.xpath(element.getVia()))) {
+        if (!AppiumUtils.byElementIsExist(driver, By.xpath(element.getVia()))) {
             try {
                 logger.info("====> " + "Login the application");
                 logger.info("====> " + "Input username " + account.getUsername());
@@ -74,13 +70,13 @@ public class ClockInServiceImpl implements ClockInService {
                 }
                 logger.info("====> " + "Log back in");
                 driver.terminateApp(config.getApplicationPackage());
-                driver.launchApp();
+                driver.activateApp(config.getApplicationPackage());
                 login();
             }
         } else {
             logger.info("====> " + "Examine name");
             driver.findElement(By.xpath(element.getVia())).click();
-            if (byElementIsExist(driver, By.xpath("//*[contains(@text, '" + account.getName() + "')]"))) {
+            if (AppiumUtils.byElementIsExist(driver, By.xpath("//*[contains(@text, '" + account.getName() + "')]"))) {
                 try {
                     driver.navigate().back();
                     clock(driver);
@@ -89,7 +85,7 @@ public class ClockInServiceImpl implements ClockInService {
                     logger.error("<==== " + e.getMessage());
                     logger.info("====> " + "Log back in");
                     driver.terminateApp(config.getApplicationPackage());
-                    driver.launchApp();
+                    driver.activateApp(config.getApplicationPackage());
                     login();
                 }
             } else {
@@ -108,7 +104,7 @@ public class ClockInServiceImpl implements ClockInService {
         while (true) {
             logger.info("====> " + "Enter clock in page");
             driver.findElement(By.xpath(element.getClock())).click();
-            if (!byElementIsExist(driver, By.xpath(element.getState()))) {
+            if (!AppiumUtils.byElementIsExist(driver, By.xpath(element.getState()))) {
                 logger.info("====> " + "Close clock in page");
                 driver.findElement(By.xpath(element.getClose())).click();
             } else {
@@ -128,32 +124,23 @@ public class ClockInServiceImpl implements ClockInService {
         int height = driver.manage().window().getSize().height;
         logger.info("====> Height: " + height);
         logger.info("<==== " + capabilities);
-        if (byElementIsExist(driver, By.xpath(element.getIsExist()))) {
+        if (AppiumUtils.byElementIsExist(driver, By.xpath(element.getIsExist()))) {
             try {
                 logger.info("====> " + "Logout the application");
                 driver.findElement(By.xpath(element.getMine())).click();
-                new TouchAction<>(driver).press(point(width / 2, height / 2)).waitAction(waitOptions(ofMillis(2000))).moveTo(point(width / 2, height / 10)).release().perform();
+                Thread.sleep(2000);
+                AppiumUtils.touch(driver, width, height);
                 driver.findElement(By.xpath(element.getSetting())).click();
                 Thread.sleep(2000);
-                new TouchAction<>(driver).press(point(width / 2, height / 2)).waitAction(waitOptions(ofMillis(2000))).moveTo(point(width / 2, height / 10)).release().perform();
+                AppiumUtils.touch(driver, width, height);
                 driver.findElement(By.xpath(element.getLogout())).click();
                 driver.findElement(By.xpath(element.getAffirm())).click();
             } catch (Exception e) {
                 logger.error("<==== " + e.getMessage());
                 driver.terminateApp(config.getApplicationPackage());
-                driver.launchApp();
+                driver.activateApp(config.getApplicationPackage());
                 logout(driver);
             }
-        }
-    }
-
-    @Override
-    public Boolean byElementIsExist(AndroidDriver driver, By locator) {
-        try {
-            driver.findElement(locator);
-            return true;
-        } catch (Exception e) {
-            return false;
         }
     }
 
@@ -164,4 +151,5 @@ public class ClockInServiceImpl implements ClockInService {
         logger.info("====> " + "Driver quit");
         driver.quit();
     }
+
 }

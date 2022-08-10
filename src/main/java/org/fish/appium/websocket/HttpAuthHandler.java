@@ -13,6 +13,8 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 @Getter
 @Setter
@@ -25,6 +27,10 @@ public class HttpAuthHandler extends TextWebSocketHandler {
     public HttpAuthHandler(PayLoadClockIn clockIn) {
         this.clockIn = clockIn;
     }
+
+    private BlockingQueue<String> DEVICE_STATUS_QUEUE = new ArrayBlockingQueue<>(300);
+
+    private Boolean STATE = false;
 
     /**
      * socket 建立成功事件
@@ -67,9 +73,7 @@ public class HttpAuthHandler extends TextWebSocketHandler {
                                 accountEntity.getPassword()
                         )
                 ));
-                TextMessage res = clockIn.clock(accountEntity);
-                session.sendMessage(res);
-                session.sendMessage(new TextMessage("Start..."));
+                clockIn.clock(accountEntity, DEVICE_STATUS_QUEUE, session);
                 clockIn.login();
             } catch (Exception e) {
                 session.sendMessage(new TextMessage(e.getMessage()));
@@ -92,6 +96,5 @@ public class HttpAuthHandler extends TextWebSocketHandler {
             System.out.printf(String.format("User-%s 断开连接%n", token));
         }
     }
-
 
 }
