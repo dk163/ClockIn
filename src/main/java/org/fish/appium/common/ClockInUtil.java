@@ -8,7 +8,9 @@ import org.openqa.selenium.Point;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 
 import static java.time.Duration.ofMillis;
 
@@ -23,6 +25,11 @@ public class ClockInUtil {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public static String getCurrentDateTime(){
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");//设置日期格式
+        return df.format(new Date());
     }
 
     public static void touch(AndroidDriver driver, int width, int height) {

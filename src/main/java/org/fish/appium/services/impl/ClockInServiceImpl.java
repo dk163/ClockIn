@@ -5,12 +5,14 @@ import io.appium.java_client.android.AndroidDriver;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.io.FileUtils;
 import org.fish.appium.common.ClockInUtil;
 import org.fish.appium.entity.AccountEntity;
 import org.fish.appium.entity.ConfigEntity;
 import org.fish.appium.entity.ElementEntity;
 import org.fish.appium.services.ClockInService;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+import java.io.File;
 import java.io.IOException;
 
 @Getter
@@ -71,7 +74,19 @@ public class ClockInServiceImpl implements ClockInService {
                 driver.findElement(By.id(element.getPassword())).sendKeys(account.getPassword());
                 driver.findElement(By.id(element.getPrivacy())).click();
                 driver.findElement(By.id(element.getLogin())).click();
-                clock(driver);
+                Thread.sleep(5000);
+                if (ClockInUtil.byElementIsExist(driver, By.xpath("//*[@text=\"为确保帐号安全，需要再进行下一步验证\"]"))) {
+                    driver.findElement(By.xpath("//*[@text=\"继 续\"]")).click();
+                    driver.findElement(By.xpath("//*[@text=\"好\"]")).click();
+                    File screenshot = driver.getScreenshotAs(OutputType.FILE);
+                    try {
+                        FileUtils.copyFile(screenshot, new File("D:\\AutoScreenCapture\\" + ClockInUtil.getCurrentDateTime() + ".jpg"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    clock(driver);
+                }
             } catch (Exception e) {
                 send("error", "<==== " + e.getMessage());
                 if (e.toString().startsWith("Unable to create a new remote session.")) {
@@ -103,6 +118,13 @@ public class ClockInServiceImpl implements ClockInService {
                 logout(driver);
                 login();
             }
+        }
+    }
+
+    @Override
+    public void verify(AndroidDriver driver) {
+        if (ClockInUtil.byElementIsExist(driver, By.xpath("//*[contains(@text, '为确保账号安全')]"))) {
+            System.out.println("=============================================");
         }
     }
 
@@ -158,5 +180,4 @@ public class ClockInServiceImpl implements ClockInService {
         send("info", "====> " + "完成 请执行 /ws 0 断开连接");
         driver.quit();
     }
-
 }

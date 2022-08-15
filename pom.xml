@@ -19,6 +19,7 @@
         <appium.version>8.1.1</appium.version>
         <spring-test.version>5.3.16</spring-test.version>
         <cucumber.version>7.2.3</cucumber.version>
+        <commons-io.version>2.11.0</commons-io.version>
     </properties>
 
     <dependencies>
@@ -102,6 +103,11 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>5.8.4</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
         </dependency>
     </dependencies>
 
