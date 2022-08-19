@@ -75,18 +75,7 @@ public class ClockInServiceImpl implements ClockInService {
                 driver.findElement(By.id(element.getPrivacy())).click();
                 driver.findElement(By.id(element.getLogin())).click();
                 Thread.sleep(5000);
-                if (ClockInUtil.byElementIsExist(driver, By.xpath("//*[@text=\"为确保帐号安全，需要再进行下一步验证\"]"))) {
-                    driver.findElement(By.xpath("//*[@text=\"继 续\"]")).click();
-                    driver.findElement(By.xpath("//*[@text=\"好\"]")).click();
-                    File screenshot = driver.getScreenshotAs(OutputType.FILE);
-                    try {
-                        FileUtils.copyFile(screenshot, new File("D:\\AutoScreenCapture\\" + ClockInUtil.getCurrentDateTime() + ".jpg"));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    clock(driver);
-                }
+                verify(driver);
             } catch (Exception e) {
                 send("error", "<==== " + e.getMessage());
                 if (e.toString().startsWith("Unable to create a new remote session.")) {
@@ -122,9 +111,24 @@ public class ClockInServiceImpl implements ClockInService {
     }
 
     @Override
-    public void verify(AndroidDriver driver) {
-        if (ClockInUtil.byElementIsExist(driver, By.xpath("//*[contains(@text, '为确保账号安全')]"))) {
-            System.out.println("=============================================");
+    public void verify(AndroidDriver driver) throws InterruptedException, IOException {
+        if (ClockInUtil.byElementIsExist(driver, By.xpath("//*[@text=\"为确保帐号安全，需要再进行下一步验证\"]"))) {
+            driver.findElement(By.xpath("//*[@text=\"继 续\"]")).click();
+            driver.findElement(By.xpath("//*[@text=\"好\"]")).click();
+            Thread.sleep(5000);
+            File screenshot = driver.getScreenshotAs(OutputType.FILE);
+            try {
+                String filePath = "E:\\Document\\Test\\AutoScreenCapture\\" + ClockInUtil.getCurrentDateTime() + ".jpg";
+                FileUtils.copyFile(screenshot, new File(filePath));
+                session.sendMessage(new TextMessage("base64://" + ClockInUtil.imageToBase64ByLocal(filePath)));
+                send("info", "====> " + "请于一分钟内完成扫码登陆操作");
+                Thread.sleep(60000);
+                clock(driver);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            clock(driver);
         }
     }
 

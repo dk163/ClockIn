@@ -12,5 +12,5 @@ public interface ClockInService {
     void login() throws InterruptedException, IOException;
     void clock(AndroidDriver driver) throws IOException;
     void logout(AndroidDriver driver) throws IOException;
-    void verify(AndroidDriver driver);
+    void verify(AndroidDriver driver) throws InterruptedException, IOException;
 }

@@ -7,7 +7,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
+import sun.misc.BASE64Encoder;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -27,7 +31,7 @@ public class ClockInUtil {
         }
     }
 
-    public static String getCurrentDateTime(){
+    public static String getCurrentDateTime() {
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");//设置日期格式
         return df.format(new Date());
     }
@@ -42,4 +46,18 @@ public class ClockInUtil {
         sequence.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
         driver.perform(Collections.singletonList(sequence));
     }
+
+    public static String imageToBase64ByLocal(String imgFile) {
+        byte[] data = null;
+        try {
+            InputStream in = Files.newInputStream(Paths.get(imgFile));
+            data = new byte[in.available()];
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        BASE64Encoder encoder = new BASE64Encoder();
+        return encoder.encode(data);
+    }
+
 }
